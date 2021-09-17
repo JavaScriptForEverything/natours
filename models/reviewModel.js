@@ -71,7 +71,7 @@ reviewSchema.pre(/^find/, function(next) {
 
 			To solve this problem, in userSchema.select() and this.populate({ select: ''}) both must have
 			select or deselect not mixture */
-		select: '-role -name'
+		select: '-__v'
 	})
 	// // to prevent Population Chaining we have to disable this populate, It is not so importent to reviews
 	// .populate({path: 'tour', select: 'name'})

@@ -1,7 +1,11 @@
+const express = require('express')
+
 const globalController = require('../controllers/globalController')
 
 
+
 module.exports = (app) => {
+
   // global routeHandler for unknown routes
   app.all('*', globalController.globalRouteHandler )
 
