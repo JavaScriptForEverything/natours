@@ -209,7 +209,5 @@ tourSchema.pre(/^find/, function(next) {
 // })
 
 
-
-
 module.exports = model('Tour', tourSchema)
 

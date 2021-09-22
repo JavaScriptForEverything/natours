@@ -9,14 +9,13 @@ import Grid from '@material-ui/core/Grid'
 
 
 const Home = () => {
+	console.clear() 			// remove any errors on page load
 	const dispatch = useDispatch()
 	const { tours } = useSelector( state => state.tours )
 
-	// console.log( tours[0] )
-
 	useEffect(() => {
 		dispatch( getAllTours() )
-	}, [])
+	}, [dispatch])
 
 	return(
 		<>

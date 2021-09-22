@@ -52,11 +52,12 @@ const TourDetails = ({ match }) => {
 	const classes = useStyles()
 	const dispatch = useDispatch()
 	const { tour } = useSelector( state => state.tours )
-	console.log( tour.startDates[1] )
+
+	// console.log( tour.startDates[1] instanceof Date )
 
 	useEffect(() => {
-		dispatch( getTourDetails(match.params.id) )
-	}, [])
+		dispatch( getTourDetails(tour._id) )
+	}, [dispatch, tour._id])
 
 	return(
 		<>

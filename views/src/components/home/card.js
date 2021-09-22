@@ -14,8 +14,8 @@ import CardActions from '@material-ui/core/CardActions'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
-import Avatar from '@material-ui/core/Avatar'
-import Divider from '@material-ui/core/Divider'
+// import Avatar from '@material-ui/core/Avatar'
+// import Divider from '@material-ui/core/Divider'
 
 import { makeStyles } from '@material-ui/core'
 
@@ -37,7 +37,8 @@ const useStyles = makeStyles( theme => ({
 const CardComponent = ({ tour }) => {
 	const classes = useStyles()
 	const history = useHistory()
-	// console.log( tour._id )
+
+	// console.log( tour.name, tour._id )
 
 	return(
 		<Card>
@@ -52,7 +53,7 @@ const CardComponent = ({ tour }) => {
 				}
 			/>
 			<CardActionArea
-				onClick = {() => history.push(`tour/${tour._id}`)}
+				onClick = {() => history.push(`tour/${tour.slug}`)}
 			>
 				<CardMedia
 					component='img'
@@ -139,7 +140,7 @@ const CardComponent = ({ tour }) => {
 						variant='contained'
 						color='secondary'
 						component={Link}
-						to={`tour/${tour.id}`}
+						to={`tour/${tour.slug}`}
 					> Details </Button>
 				</Grid>
 			</CardActions>

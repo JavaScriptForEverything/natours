@@ -201,3 +201,12 @@ exports.deleteMe = catchAsync( async(req, res, next) => {
   next()
 })
 
+
+
+//--------[ logout ]----------
+exports.logout = (req, res, next) => {
+  res.cookie('token', null, { expires: new Date(Date.now() - 1000) })
+  res.status(200).json({
+    status: 'success'
+  })
+}

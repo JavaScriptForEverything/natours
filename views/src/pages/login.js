@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { isEmail } from 'validator'
+
 import Helmet from '../components/helmet'
+import { login, getMe } from '../store/userReducer'
+import { showAlert } from '../store/dialogReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { makeStyles } from '@material-ui/core'
 import Container from '@material-ui/core/Container'
@@ -10,6 +15,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Avatar from '@material-ui/core/Avatar'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 
@@ -47,16 +53,53 @@ const fieldItems = {} 					// { email: '', password: '' }
 inputItems.forEach( field => fieldItems[field.name] = '' )
 
 
-const Login = () => {
+
+const Login = ({ history }) => {
 	const classes = useStyles()
 	const [fields, setFields ] = useState(fieldItems)
 	const [fieldErrors, setFieldErrors ] = useState(fieldItems)
 
+	const dispatch = useDispatch()
+	const { loading, error, authenticated } = useSelector( state => state.users )
+
+
+	const validate = () => {
+		const errors = {}
+		// Object.keys(fields).forEach(field => {
+		// 	if( !fields[field].trim() )  errors[field] = `${field} field is empty`
+		// })
+		Object.keys(fields).forEach(field => !fields[field].trim() && (errors[field] = `${field} field is empty`) )
+		if( !isEmail(fields.email) ) errors.email = 'Invalid Email address'
+
+		setFieldErrors(errors) 	// set Errors
+
+		// if every field empty only then return true else return false
+		return Object.values( errors ).every( field => field === '')
+	}
+
+
+	const changeHandler = (evt) => {
+		setFields({ ...fields, [evt.target.name]: evt.target.value })
+		validate( fields )
+	}
 
 	const handleFormSubmit = (evt) => {
 		evt.preventDefault()
 
-		console.log( fields )
+		if( !validate( fields ) ) return 		// if no error then move on
+		dispatch( login(fields) ) 					// add cookie if success
+
+
+		// handle error first
+		// console.log( {error} )
+		// if(error.trim()) return dispatch( showAlert({ open: true, error, severity: 'error' }) )
+
+
+		// set notification + loader
+		const message = 'Congratuation you are successfully loged in !!!'
+		dispatch( showAlert({ open: true, message, severity: 'success' }) )
+		dispatch( getMe() ) 								// must required to got user immediately after login
+		// no need to push, because By default login route push to /profile if authenticated
 	}
 
 	return(
@@ -78,11 +121,12 @@ const Login = () => {
 									type={type}
 									name={name}
 									value={fields[name]}
-									onChange={(evt) => setFields({...fields, [evt.target.name]: evt.target.value })}
+									onChange={changeHandler}
+									// onChange={(evt) => setFields({...fields, [evt.target.name]: evt.target.value })}
 									fullWidth
 									required
 									autoFocus={key === 0}
-									autoComplete='new-password'
+									// autoComplete='new-password'
 
 									error={!!fieldErrors[name]}
 									helperText={fieldErrors[name]}
@@ -96,7 +140,9 @@ const Login = () => {
 								fullWidth
 								type='submit'
 								className={classes.loginButton}
-							>Login</Button>
+							>
+								{ loading ? <CircularProgress size={24} style={{ color: 'white' }} /> : 'Login' }
+							</Button>
 
 							<Grid container justifyContent='space-between'>
 								<Typography variant='body2' color='primary' component={Link} to='/forgot-password'>Forgot password?</Typography>

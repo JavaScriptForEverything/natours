@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 
+import { logout } from '../store/userReducer'
+import { useDispatch, useSelector } from 'react-redux'
+
+
 import { toCapitalize } from '../util'
-import Search from './search'
+// import Search from './search'
 
 import { makeStyles } from '@material-ui/core'
 
@@ -30,6 +34,7 @@ const useStyles = makeStyles( theme => ({
 const navItems = [
 	{ label: 'home', path: '/' },
 	{ label: 'about', path: '/about' },
+	{ label: 'contact', path: '/contact' },
 ]
 const menuItems = ['profile', 'dashboard', 'logout']
 
@@ -40,7 +45,12 @@ const Navbar = () => {
 	const [ openMenu, setOpenMenu ] = useState(false)
 	const [ anchorEl, setAnchorEl ] = useState(null)
 
-	const user = false
+	const dispatch = useDispatch()
+
+	const { authenticated, user } = useSelector( state => state.users )
+	// useEffect(() => dispatch(getMe()), [])
+
+
 
 	const avatarClicked = (evt) => {
 		evt.preventDefault()
@@ -48,6 +58,13 @@ const Navbar = () => {
 		setOpenMenu(true)
 	}
 	const handleMenuItem = (evt) => setOpenMenu(false)
+	const handleLogout = (evt) => {
+		setOpenMenu(false)
+		dispatch( logout() )
+
+		history.push('/login')
+		// setTimeout(() => window.location.reload(), 100)
+	}
 
 
 	return (
@@ -65,30 +82,34 @@ const Navbar = () => {
 				> {label} </Button>
 				)}
 
-				{user ? (
+				{ authenticated ? (
 					<>
-					<IconButton
+					{/*<IconButton style={{ marginLeft: 'auto' }} onClick={avatarClicked} >*/}
+					<Avatar component={Link} to='#'
 						style={{ marginLeft: 'auto' }}
 						onClick={avatarClicked}
-					>
-					<Avatar
-						title='Jonus Scheman'
-						src='/users/user-1.jpg'
-						alt='/users/user-1.jpg'
+
+						title={toCapitalize(user.name)}
+						src={`/users/${user.photo}`}
+						alt={`/users/${user.photo}`}
 					/>
-					</IconButton>
+					{/*</IconButton>*/}
 					<Menu
 						open={openMenu}
 						anchorEl={anchorEl}
 						onClose={() => setOpenMenu(false)}
 					>
-						{menuItems.map( (item, key) => <MenuItem
-								key={key}
+						{menuItems.map( (item, key) => item !== 'logout' ? <MenuItem key={key}
 								value={key}
 								onClick={handleMenuItem}
 								component={Link}
 								to={`/${item}`}
-							> {toCapitalize(item)} </MenuItem>
+							> {toCapitalize(item)} </MenuItem> : <MenuItem key={key}
+								value={key}
+								onClick={handleLogout}
+							>
+								{toCapitalize(item)}
+							</MenuItem>
 						)}
 					</Menu>
 					</>

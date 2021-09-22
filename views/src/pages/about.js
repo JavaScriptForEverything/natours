@@ -165,7 +165,7 @@ const About = () => {
     </Menu>
   );
 
-  return (<>ok</>)
+  // return (<>ok</>)
 
   return (
     <div className={classes.grow}>
@@ -235,5 +235,6 @@ const About = () => {
       {renderMenu}
     </div>
   )
+
 }
 export default About

@@ -4,6 +4,7 @@ import Helmet from '../components/helmet'
 // import TextField from '@material-ui/core/TextField'
 
 const Signup = () => {
+
 	return(
 		<>
 			<Helmet title='Sign Up Page' />

@@ -2,7 +2,7 @@ const { Router } = require('express')
 const {getUsers, getUserById, filterUser, updateUser, deleteUser } = require('../controllers/userController')
 const {
 	protect, restrictTo,
-	me, signup, login,
+	me, signup, login, logout,
 	forgotPassword, resetPassword, updateMyPassword, updateMe, deleteMe
 } = require('../controllers/authController')
 
@@ -11,6 +11,7 @@ module.exports = router = Router()
 
 router.route('/signup').post(signup)     //   /api/users/signup
 router.route('/login').post(login)       //   /api/users/login
+router.route('/logout').get(logout)      //
 // Note: Never ever update password with user's update, always use password reset process
 router.route('/forgot-password').post(forgotPassword)   // Step-1: Send reset token via email
 router.route('/reset-password/:resetToken').patch(resetPassword)     // Step-2: get token from email and use here.
