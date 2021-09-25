@@ -5,12 +5,16 @@
   "private": true,
   "main": "server.js",
   "scripts": {
-    "start": "node .",
-    "dev": "nodemon .",
-    "prod": "NODE_ENV=production nodemon .",
     "seeder": "node models/seeder.js",
     "seeder:dev": "node models/seeder.js --import",
-    "seeder:prod": "NODE_ENV=production node models/seeder.js --import"
+    "seeder:prod": "NODE_ENV=production node models/seeder.js --import",
+
+    "server" : "nodemon .",
+    "server:prod" : "NODE_ENV=production nodemon .",
+    "client" : "cd views && yarn start",
+
+    "heroku-postbuild" : "yarn install && cd views && yarn install && yarn build",
+    "start": "node ."
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
