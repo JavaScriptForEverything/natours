@@ -18,7 +18,6 @@ const reviewRouter = require('./routes/reviewRoute')
 const globalController = require('./controllers/globalController')
 
 
-
 const app = express()
 
 
