@@ -80,11 +80,11 @@ app.use('/api/reviews', reviewRouter)
 		. I don't know why not it works on other file by imported ?
 */
 // // if( process.env.NODE_ENV === 'production' ) {
-//   const rootDir = path.join(__dirname, 'views', 'build');
-//   const indexHtml = path.resolve(__dirname, 'views', 'build', 'index.html');
+  const rootDir = path.join(__dirname, 'views', 'build');
+  const indexHtml = path.resolve(__dirname, 'views', 'build', 'index.html');
 
-//   app.use( express.static(rootDir))                     // views/build  is now public dir
-//   app.get('/', (req, res) => res.sendFile(indexHtml))   // /views/build/index.html
+  app.use( express.static(rootDir))                     // views/build  is now public dir
+  app.get('/', (req, res) => res.sendFile(indexHtml))   // /views/build/index.html
 // // }
 
 
