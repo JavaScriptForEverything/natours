@@ -40,7 +40,7 @@ const userSchema = new Schema({
 
 	photo: {
 		type: String,
-		default: 'user.jpg'
+		default: 'default.jpg'
 	},
 	role: { 												// Don't Allow user to update this property (Only admin allow it)
 		type: String,

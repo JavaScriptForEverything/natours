@@ -63,6 +63,7 @@ exports.signup = catchAsync(async(req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     confirmPassword: req.body.confirmPassword,
+    photo: req.body.photo,
     // role: req.body.role,                       // only allow if you want to create admin user
   }
 

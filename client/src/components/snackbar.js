@@ -23,6 +23,7 @@ const SnackbarComponent = () => {
 			}}
 			onClick={ closeAlert }
 			onClose={ closeAlert }
+			autoHideDuration={3000}
 		>
 			<Alert
 				severity={severity}

@@ -11,10 +11,10 @@
 
     "server" : "nodemon .",
     "server:prod" : "NODE_ENV=production nodemon .",
-    "client" : "cd views && npm start",
+    "client" : "cd client && yarn start",
 
-    "heroku-postbuild" : "npm install && cd views && npm install && npm run build",
-    "start": "node server.js"
+    "heroku-postbuild" : "yarn install && cd client && yarn install && yarn run build",
+    "start": "node ."
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

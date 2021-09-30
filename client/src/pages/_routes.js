@@ -33,8 +33,8 @@ const Routes = () => {
       {/*{ authenticated ? <Redirect to='/profile' /> : <Route path='/login' component={Login} /> }*/}
       {/*{ authenticated ? <Redirect to='/profile' /> : <Route path='/signup' component={Signup} /> }*/}
 
-      <ProtectedRoute path='/profile' component={Profile} />
-      <ProtectedRoute path='/dashboard' component={Dashboard} />
+      <Route path='/profile' component={Profile} />
+      <Route path='/dashboard' component={Dashboard} />
 
     </Switch>
   )

@@ -2,6 +2,7 @@ const path = require('path')
 const express = require('express')
 const cookieParser = require('cookie-parser')
 
+const cors = require('cors')
 const rateLimit = require('express-rate-limit')             // set limition on how many request can send from a single IP
 const helmet = require('helmet')                            // add some common (8 headers) security header
 
@@ -19,7 +20,7 @@ const globalController = require('./controllers/globalController')
 
 
 const app = express()
-
+app.use( cors() )
 
 //------------[ Validation & sanitization ]-----------------
 
@@ -79,13 +80,13 @@ app.use('/api/reviews', reviewRouter)
 /* after build from React side, then 	browse	http://localhost:5000 	will be shown
 		. I don't know why not it works on other file by imported ?
 */
-// // if( process.env.NODE_ENV === 'production' ) {
-  const rootDir = path.join(__dirname, 'views', 'build');
-  const indexHtml = path.resolve(__dirname, 'views', 'build', 'index.html');
+if( process.env.NODE_ENV === 'production' ) {
+  const rootDir = path.join(__dirname, 'client', 'build');
+  const indexHtml = path.resolve(__dirname, 'client', 'build', 'index.html');
 
   app.use( express.static(rootDir))                     // views/build  is now public dir
   app.get('/', (req, res) => res.sendFile(indexHtml))   // /views/build/index.html
-// // }
+}
 
 
 //------------[ Error handlers ]-----------------

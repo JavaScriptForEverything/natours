@@ -8,6 +8,7 @@ const { reducer, actions } = createSlice({
 		loading: false,
 		error: '',
 		authenticated: false,
+		data: {}, 							// { status: 'success', user: {...} }
 		user: { 								// 	/api/users/me
 			name: '',
 			email: '',
@@ -20,14 +21,25 @@ const { reducer, actions } = createSlice({
 		}
 	},
 	reducers : {
+		error: (state, action) => ({
+			...state, loading: false, error: action.payload
+		}),
 		requested: (state, action) => ({
 			...state, loading: true,
 		}),
+
+
 		logedIn: (state, action) => ({
 			...state,
 			loading: false,
 			error: '',
 			authenticated: true
+		}),
+		signedUp: (state, action) => ({
+			...state,
+			loading: false,
+			error: '',
+			data: action.payload
 		}),
 		me: (state, action) => ({
 			...state,
@@ -49,16 +61,13 @@ const { reducer, actions } = createSlice({
 			data: action.payload
 		}),
 
-		error: (state, action) => ({
-			...state, loading: false, error: action.payload
-		}),
 	}
 })
 export default reducer
 
 
 
-
+// (1)
 export const login = (obj) => catchAsyncDispatch(async (dispatch) => {
 	dispatch( actions.requested() )
 
@@ -67,9 +76,19 @@ export const login = (obj) => catchAsyncDispatch(async (dispatch) => {
 
 }, actions.error)
 
+// (5)
+export const signup = (obj) => catchAsyncDispatch(async (dispatch) => {
+	dispatch( actions.requested() )
+
+	const { data } = await axios.post('/api/users/signup', obj)
+	dispatch( actions.signedUp(data) )
+
+}, actions.error)
 
 
 
+
+// (2)
 export const getMe = () => catchAsyncDispatch(async (dispatch, getStore) => {
 	/* if( !getStore().users.authenticated ) return
 		This not works for page reload time, so se have to check if cookie exists or not
@@ -86,7 +105,7 @@ export const getMe = () => catchAsyncDispatch(async (dispatch, getStore) => {
 
 
 
-// to logout we need 	/api/users/logout 	Route to remove cookie
+// (3) to logout we need 	/api/users/logout 	Route to remove cookie
 export const logout = () => catchAsyncDispatch(async (dispatch) => {
 	dispatch( actions.requested() )
 
@@ -97,6 +116,7 @@ export const logout = () => catchAsyncDispatch(async (dispatch) => {
 
 
 
+// (4)
 export const getPassword = (obj) => catchAsyncDispatch(async (dispatch) => {
 	dispatch( actions.requested() )
 

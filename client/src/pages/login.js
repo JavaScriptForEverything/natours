@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { isEmail } from 'validator'
 
+import { createInputItem } from '../util'
 import Helmet from '../components/helmet'
 import { login, getMe } from '../store/userReducer'
 import { showAlert } from '../store/dialogReducer'
@@ -42,7 +43,6 @@ const useStyles = makeStyles( theme => ({
 }))
 
 
-const createInputItem = (label='', name='', type='text') => ({label, name, type})
 const inputItems = [
 	// { label: 'Email Address', type: 'email', name:'email' },
 	// { label: 'Password', type: 'password', name:'password' },
