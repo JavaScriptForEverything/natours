@@ -76,6 +76,13 @@ app.use('/api/users', userRouter)
 app.use('/api/tours', tourRouter)
 app.use('/api/reviews', reviewRouter)
 
+//------------[ Error handlers ]-----------------
+// global routeHandler for unknown routes
+app.all('/api', globalController.globalRouteHandler )
+
+// Global Error handler
+app.use(globalController.globalErrorHandler)
+
 //------------[ Set up for React index.html ]-----------------
 /* after build from React side, then 	browse	http://localhost:5000 	will be shown
 		. I don't know why not it works on other file by imported ?
@@ -88,13 +95,6 @@ if( process.env.NODE_ENV === 'production' ) {
   app.get('/', (req, res) => res.sendFile(indexHtml))   // /views/build/index.html
 }
 
-
-//------------[ Error handlers ]-----------------
-// global routeHandler for unknown routes
-app.all('*', globalController.globalRouteHandler )
-
-// Global Error handler
-app.use(globalController.globalErrorHandler)
 
 // Promise.reject(new Error('database connection failed'))
 // globalController.promiseHandler(app)     // Global handle promise Rejection: unhandledRejection
