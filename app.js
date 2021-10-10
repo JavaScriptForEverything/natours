@@ -22,6 +22,12 @@ const globalController = require('./controllers/globalController')
 const app = express()
 app.use( cors() )
 
+// set Root Dirrectory + indexfile
+const rootDir = path.resolve(__dirname, 'client', 'build');
+const indexHtml = path.resolve(__dirname, 'client', 'build', 'index.html');
+app.use( express.static(rootDir))                     // views/build  is now public dir
+
+
 //------------[ Validation & sanitization ]-----------------
 
 app.use('/api', rateLimit({             // Only apply on our api, not on our webpage.
@@ -87,13 +93,9 @@ app.use(globalController.globalErrorHandler)
 /* after build from React side, then 	browse	http://localhost:5000 	will be shown
 		. I don't know why not it works on other file by imported ?
 */
-if( process.env.NODE_ENV === 'production' ) {
-  const rootDir = path.join(__dirname, 'client', 'build');
-  const indexHtml = path.resolve(__dirname, 'client', 'build', 'index.html');
-
-  app.use( express.static(rootDir))                     // views/build  is now public dir
-  app.get('/', (req, res) => res.sendFile(indexHtml))   // /views/build/index.html
-}
+// if( process.env.NODE_ENV === 'production' ) {
+  app.get('*', (req, res) => res.sendFile(indexHtml))           // /ckient/build/index.html
+// }
 
 
 // Promise.reject(new Error('database connection failed'))
