@@ -1,36 +1,14 @@
-import { useState, useEffect } from 'react'
-import Helmet from '../components/helmet'
-// import Loader from '../components/loader'
-// import { showAlert } from '../store/dialogReducer'
-// import { useDispatch } from 'react-redux'
+import MetaData from '../components/metaData'
 
-
-import Button from '@material-ui/core/Button'
-import Dialog from '@material-ui/core/Dialog'
-
+// import Typography from '@mui/material/Typography'
+// import Button from '@mui/material/Button'
 
 const Contact = () => {
-	const [ open, setOpen ] = useState(false)
-
 
 	return (
 		<>
-			<Helmet title='Contact Page' />
-				<Button
-					color='primary'
-					variant='contained'
-					onClick={() => setOpen(!open)}
-				>Toggle Modal</Button>
-
-			<Dialog open={open} >
-
-				<Button
-					color='primary'
-					variant='contained'
-					onClick={() => setOpen(false)}
-				>Close Modal</Button>
-			</Dialog>
-
+			<MetaData title='Contact Page' />
+			{/*-----[ start coding bellow here ]------*/}
 
 
 		</>

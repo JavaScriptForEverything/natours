@@ -1,24 +1,32 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+
 const { reducer, actions } = createSlice({
-	name: 'dialogs',
+	name: 'products',
 	initialState: {
-		error: '',
-		open: false,
-		message: 'Something is wrong',
-		severity: 'error',
+		open : false,
+		severity: 'info',
+		message: '',
+		loader: false
 	},
 	reducers: {
-		showAlert: (state, action) => ({
+		alert: (state, action) => ({
 			...state,
-			...action.payload 			// { open, message, severity }
+			...action.payload
 		}),
-
+		loader: (state, action) => ({
+			...state, loader: action.payload
+		})
 	}
 })
 export default reducer
 
 
-export const showAlert = ({ open=false, message='', severity='error' }) => (dispatch) => {
-	dispatch( actions.showAlert({open, message, severity}))
+
+export const showAlert = ({open=false, severity='info', message=''}) => (dispatch) => {
+	dispatch(actions.alert({ open, severity, message}))
+}
+
+export const showLoader = (open=false) => (dispatch) => {
+	dispatch( actions.loader(open))
 }

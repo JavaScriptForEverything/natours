@@ -2,6 +2,8 @@
 .env
 dev-data
 demo
+**/_demo/**
+clientOld
 
 **/build/**
 npm-debug.log*

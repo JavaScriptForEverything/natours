@@ -1,127 +1,68 @@
 import { createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { catchAsyncDispatch } from '../util'
+
 
 const { reducer, actions } = createSlice({
-	name: 'users',
+	name: 'products',
 	initialState: {
-		loading: false,
 		error: '',
-		authenticated: false,
-		data: {}, 							// { status: 'success', user: {...} }
-		user: { 								// 	/api/users/me
-			name: '',
-			email: '',
-			photo: '',
-			role: ''
-		},
-		data: { 								// /api/users/forgot-password
-			message: '',
-			resetToken: ''
-		}
+		loading: false,
+		authenticated: !!localStorage.getItem('token') 	|| false
 	},
-	reducers : {
-		error: (state, action) => ({
-			...state, loading: false, error: action.payload
-		}),
+	reducers: {
 		requested: (state, action) => ({
-			...state, loading: true,
+			...state,
+			loading: true,
+		}),
+		failed: (state, action) => ({
+			...state,
+			loading: false,
+			error: action.payload
 		}),
 
+		logedIn: (state, action) => {
+			const token = action.payload.token
 
-		logedIn: (state, action) => ({
-			...state,
-			loading: false,
-			error: '',
-			authenticated: true
-		}),
-		signedUp: (state, action) => ({
-			...state,
-			loading: false,
-			error: '',
-			data: action.payload
-		}),
-		me: (state, action) => ({
-			...state,
-			loading: false,
-			error: '',
-			authenticated: true,
-			user: action.payload.data,
-		}),
-		logedOut: (state, action) => ({
-			...state,
-			loading: false,
-			authenticated: false,
-			user: state.user
-		}),
+			if(!token) return { ...state, loading: false }
+			localStorage.setItem('token', token)
 
-		forgotPassword: (state, action) => ({
-			...state,
-			loading: false,
-			data: action.payload
-		}),
+			return {
+				...state,
+				loading: action.payload.loading,
+				authenticated: true,
+				error: ''
+			}
+		},
+		logedOut: (state, action) => {
+			localStorage.removeItem('token')
+			return {...state, loading: false, authenticated: false, }
+		}
 
-	}
+
+	} // End of Reducer
 })
 export default reducer
 
 
 
-// (1)
-export const login = (obj) => catchAsyncDispatch(async (dispatch) => {
-	dispatch( actions.requested() )
+export const loginMe = (loading=false) => (dispatch) => {
+	try{
 
-	await axios.post('/api/users/login', obj)
-	dispatch( actions.logedIn() )
+	// this step must require to enable loading until not get data from API
+	dispatch(actions.requested())
 
-}, actions.error)
-
-// (5)
-export const signup = (obj) => catchAsyncDispatch(async (dispatch) => {
-	dispatch( actions.requested() )
-
-	const { data } = await axios.post('/api/users/signup', obj)
-	dispatch( actions.signedUp(data) )
-
-}, actions.error)
+	// const { data } = await axios.post()
+	const token = 'mysecretToken'
+	dispatch(actions.logedIn({ token, loading }))
 
 
+	} catch (err) {
+		// dispatch(actions.failed(err.response.data.message))
+		console.log(err)
 
+	}
+}
 
-// (2)
-export const getMe = () => catchAsyncDispatch(async (dispatch, getStore) => {
-	/* if( !getStore().users.authenticated ) return
-		This not works for page reload time, so se have to check if cookie exists or not
-
-			if( !token ) return
-	*/
-
-
-	dispatch( actions.requested() )
-	const { data } = await axios.get('/api/users/me')
-	dispatch( actions.me(data) )
-
-}, actions.error)
-
-
-
-// (3) to logout we need 	/api/users/logout 	Route to remove cookie
-export const logout = () => catchAsyncDispatch(async (dispatch) => {
-	dispatch( actions.requested() )
-
-	await axios.get('/api/users/logout') 				// requires to remove cookie
-	dispatch( actions.logedOut() ) 							// requires to empty store.users.user
-
-}, actions.error)
-
-
-
-// (4)
-export const getPassword = (obj) => catchAsyncDispatch(async (dispatch) => {
-	dispatch( actions.requested() )
-
-	const { data } = await axios.post('/api/users/forgot-password', obj) 				// requires to remove cookie
-	dispatch( actions.forgotPassword(data) ) 							// requires to empty store.users.user
-
-}, actions.error)
-
+export const logoutMe = () => (dispatch) => {
+	dispatch(actions.requested())
+	dispatch(actions.logedOut())
+}

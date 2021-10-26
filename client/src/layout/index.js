@@ -1,18 +1,24 @@
-import Header from './_header'
-import Footer from './_footer'
+import Snackbar from './snackbar'
+import Loader from './loader'
 
-import CssBaseline from '@material-ui/core/CssBaseline'
+import AppBar from './appBar'
+// import Header from './header'
+import Footer from './footer'
 
+import CssBaseline from '@mui/material/CssBaseline'
 
 
 const Layout = ({ children }) => {
 
 	return (
 		<>
-			{/*----[ Reset Css ]----*/}
 			<CssBaseline />
+			<AppBar />
+			<Snackbar /> 		{/*Add Alert on parent Component, so that all child component can append from it*/}
+			<Loader /> 			{/*full screen Loading Effect*/}
 
-			<Header />
+
+			{/*<Header />*/}
 			{children}
 			<Footer />
 		</>
