@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 
 const { reducer, actions } = createSlice({
-	name: 'products',
+	name: 'dialog',
 	initialState: {
 		open : false,
 		severity: 'info',

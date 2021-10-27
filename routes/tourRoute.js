@@ -2,6 +2,7 @@ const { Router } = require('express')
 const {
   getTours,
   getTour,
+  getTourBySlug,
   addTour,
   updateTour,
   deleteTour,
@@ -63,6 +64,7 @@ router.route('/distances/:latlong/unit/:unit').get(getToursDistances)
 
 
 
+router.route('/tour/:slug').get(getTourBySlug)
 
 
 //   /api/tours
@@ -71,8 +73,10 @@ router.route('/')
   .post(protect, restrictTo('admin', 'lead-guide'), addTour)     // Regular user should n't allow to create Tour
 
 
+
 //   /api/tours/:id
 router.route('/:id')
+  // .get(getTourBySlug)
   .get(getTour)
   .patch(updateTour)
   .delete(deleteTour)

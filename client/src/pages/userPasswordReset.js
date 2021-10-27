@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { showAlert } from '../store/dialogReducer'
+import { forgotPassword, resetPassword } from '../store/userReducer'
 import { formValidator } from '../util'
 import MetaData from '../components/metaData'
 
@@ -40,62 +41,42 @@ const UserPasswordReset = ({ history }) => {
 	const [ updateFields, setUpdateFields ] = useState({token: '', password: '', confirmPassword: ''})
 	const [ updateFieldErrors, setUpdateFieldErrors ] = useState({})
 
-	const [ loading, setLoading ] = useState(false)
+	const { loading } = useSelector(state => state.user)
 
 
 
 	const tabHandler = (evt, newValue) => setValue(newValue)
 
 	// Update Profile Form Handler
-	const profileFormHandler = (evt) => {
+	const profileFormHandler = async (evt) => {
 		evt.preventDefault()
 
 		const isValidated = formValidator(fields, setFieldErrors)
 		if(!isValidated) return
 
-		// mimic loading effect
-		setLoading(true)
-		setTimeout(() => {
-		setLoading(false)
 
-		// Success message
-		const message = 'An email is sent to your.'
-		dispatch(showAlert({open: true, severity: 'success', message}))
+		// console.log(fields)
+		// 1. Check token have or not
+		// 2. if not show error alert, else show success alert
+		// 3. dispatch forgotPassword to disable loading on success
+		await dispatch(forgotPassword(fields)) 	// if not wait, next code execute while take data from redux store
 
-		// send data to backend, via axios
-		console.log({fields})
-
-		// redirect to
-		// history.push('/user/profile')
-		tabHandler(null, 1) 							// to switch to 1st tab (Update Profile)
-
-		}, 2000)
+		// redirect to 							// history.push('/user/profile')
+		tabHandler(null, 1) 				// to switch to 1st tab (Update Profile)
 	}
 
 
 
-	const updateFieldsHandler = (evt) => {
+	const updateFieldsHandler = async (evt) => {
 		evt.preventDefault()
 
 		const isValidated = formValidator(updateFields, setUpdateFieldErrors)
 		if(!isValidated) return
 
-		// mimic loading effect
-		setLoading(true)
-		setTimeout(() => {
-		setLoading(false)
-
-		// Success message
-		const message = 'Current Password successfully !!!'
-		dispatch(showAlert({open: true, severity: 'success', message}))
-
-		// send data to backend, via axios
-		console.log({updateFields})
+		await dispatch(resetPassword(updateFields)) 	// wait to complete this step first, before move to next line
 
 		// redirect to
-		history.push('/user/profile')
-
-		}, 2000)
+		history.push('/login')
 	}
 
 

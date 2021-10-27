@@ -29,6 +29,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle'
 const Logout = 'Logout'         // also used to check & remove token to logout
 const profileMenuItems = [
   { label: 'Profile', to: '/user/profile' },
+  { label: 'Update Me', to: '/user/update-me' },
   { label: 'Order', to: '/user/payment' },
   { label: 'Dashboard', to: '/user/dashboard' },
   { label: Logout, to: '/login' },

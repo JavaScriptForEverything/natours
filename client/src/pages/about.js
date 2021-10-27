@@ -10,7 +10,8 @@ const About = () => {
 
 
 			<ul>
-				<li>complete the picture's task</li>
+				<li>complete the Tour Details Page</li>
+				<li>Change all form's username to name, so that match with backend 'name' property of schema</li>
 				<li>Search & filter </li>
 				<li>payment Form</li>
 				<li>Footer</li>

@@ -1,9 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { showAlert } from '../store/dialogReducer'
-import { addItemToCart } from '../store/tourReducer'
+import { addItemToCart, addRating, getTourBySlug } from '../store/tourReducer'
 
-import { tour } from './home'
 import MetaData from '../components/metaData'
 
 import Paper from '@mui/material/Paper'
@@ -20,11 +19,17 @@ import RemoveIcon from '@mui/icons-material/Remove'
 
 
 
-const TourDetails = () => {
+const TourDetails = ({ match }) => {
 	const [ cartItem, setCartItem ] = useState(1) 	// To increase or decrease item number
 	const dispatch = useDispatch()
 	const { addToCart } = useSelector( state => state.tour )
-		// console.log( cartItem )
+
+	const { loading, tour } = useSelector(state => state.tour )
+	// console.log(tour)
+
+	useEffect(() => {
+		dispatch(getTourBySlug(match.params.slug))
+	}, [dispatch])
 
 	const addHandler = (evt) => {
 		if( cartItem >= tour.stack ) return
@@ -52,6 +57,7 @@ const TourDetails = () => {
 	}
 
 
+
 	return (
 		<>
 			<MetaData title='tour.name: Tour Details Page' />
@@ -71,7 +77,7 @@ const TourDetails = () => {
 								<Typography variant='caption' paragraph > tour: {tour._id} </Typography>
 
 								<Typography variant='h6' paragraph >
-									<Rating readOnly defaultValue={tour.rating} precision={.5} />
+									<Rating readOnly value={tour.ratingsAverage} onChange={() => dispatch(addRating(tour.ratingsAverage))} precision={.5} />
 									( {tour.reviews.length} Reviews )
 								</Typography>
 								<Typography variant='h6' paragraph color='textPrimary' > $ {tour.price.toFixed(2)} </Typography>

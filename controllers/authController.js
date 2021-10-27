@@ -6,7 +6,12 @@ const { promisify } = require('util')
 
 //--------[ make sure user is login by this middleware ]----------
 exports.protect = catchAsync(async(req, res, next) => {
-  // if only use for website then cookie is enough, and for api, send token as bearer token.
+  /* If we don't use cookie (Only For API) then we have to send token via header
+      with every axios request on Client-Side
+
+     Don't depend only cookie, Because on client-side accessing cookie little complecated task
+     so check both cookie or Brearer Token.
+   */
   let { token } = req.cookies
   if(!token) return next(appError('Please login first', 401))
   	// token = token + 'as' 		// to throw token modification error
@@ -32,7 +37,7 @@ exports.restrictTo = (...roles) => (req, res, next) => {
   // req.user.role comes from protect route, if user logined
   const { role } = req.user
 
-  const message = `Sorry you ${role} don't have permission to perform this action.`
+  const message = `Sorry you ( role: '${role}' ) don't have permission to perform this action.`
   if(!roles.includes(role)) return next(appError(message, 403))
 
   next()
@@ -93,11 +98,11 @@ exports.login = catchAsync(async(req, res, next) => {
 	// generate token & set cookie in userSchema
 	const token = user.getTokenAndSendCookie(res)
 
-
   res.status(200).json({
     status: 'success',
-    token
-  })
+    token,                         // To authenticate user
+    // _id : user._id                 // To get User by Id on Client-Side so that, no need extra code.
+  })                               //   same on localStorage as token do.
 })
 
 
@@ -112,6 +117,7 @@ exports.login = catchAsync(async(req, res, next) => {
 
 // Step-1: POST   /api/users/forgot-password
 exports.forgotPassword = catchAsync( async(req, res, next) => {
+
   const { email } = req.body
   if( !email ) return next(appError('Please enter your email address', 400))
 

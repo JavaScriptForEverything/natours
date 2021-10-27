@@ -51,7 +51,7 @@ const CardComponent = ({ tour }) => {
 				>
 				{ token && foundYou && foundYou._id === tour._id ? (
 						<AddLabelOverImage
-							src={`/${tour.imageCover}`}
+							src={`/images/tours/${tour.imageCover}`}
 							width='100%'
 							text='Added To cart'
 							padding={10}
@@ -60,8 +60,8 @@ const CardComponent = ({ tour }) => {
 						<CardMedia
 							component='img'
 							title={`/${tour.slug}`}
-							src={`/${tour.imageCover}`}
-							alt={`/${tour.imageCover}`}
+							src={`/images/tours/${tour.imageCover}`}
+							alt={`/images/tours/${tour.imageCover}`}
 						/>
 				)}
 

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { showAlert } from '../store/dialogReducer'
+import { profileUpdate, updatePassword } from '../store/userReducer'
 import { formValidator } from '../util'
 import MetaData from '../components/metaData'
 
@@ -33,16 +34,19 @@ const UserUpdate = ({ history }) => {
 	const [ newPasswordVisibility, setNewPasswordVisibility ] = useState(1)
 	const [ confirmPasswordVisibility, setConfirmPasswordVisibility ] = useState(1)
 
+	const { loading } = useSelector( state => state.user )
+
+	// const newObj = user && Object.keys(user).length > 0 && {...user, username: user.name }
 	// user details comes from database first
 	// const [ fields, setFields ] = useState({username: '', email : '', avatar: ''})
-	const user = {username: 'Riajul Islam', email: 'abc@gmail.com', avatar: '/user.jpg'}
+	const user = {username: '', email: '', avatar: ''}
 	const [ fields, setFields ] = useState({...user })
 	const [ fieldErrors, setFieldErrors ] = useState({})
 
 	const [ updateFields, setUpdateFields ] = useState({currentPassword: '', password: '', confirmPassword: ''})
 	const [ updateFieldErrors, setUpdateFieldErrors ] = useState({})
 
-	const [ loading, setLoading ] = useState(false)
+	// console.log(newObj)
 
 
 
@@ -55,49 +59,28 @@ const UserUpdate = ({ history }) => {
 		const isValidated = formValidator(fields, setFieldErrors)
 		if(!isValidated) return
 
-		// mimic loading effect
-		setLoading(true)
-		setTimeout(() => {
-		setLoading(false)
-
-		// Success message
-		const message = 'Profile updated successfully !!!'
-		dispatch(showAlert({open: true, severity: 'success', message}))
-
+		dispatch(profileUpdate(fields))
 		// send data to backend, via axios
 		console.log({fields})
 
-		// redirect to
-		history.push('/user/profile')
-		// tabHandler(null, 0) 							// to switch to 1st tab (Update Profile)
+		// // redirect to
+		// history.push('/user/profile')
+		// // tabHandler(null, 0) 							// to switch to 1st tab (Update Profile)
 
-		}, 2000)
 	}
 
 
 
-	const updateFieldsHandler = (evt) => {
+	const updateFieldsHandler = async (evt) => {
 		evt.preventDefault()
 
 		const isValidated = formValidator(updateFields, setUpdateFieldErrors)
 		if(!isValidated) return
 
-		// mimic loading effect
-		setLoading(true)
-		setTimeout(() => {
-		setLoading(false)
-
-		// Success message
-		const message = 'Current Password successfully !!!'
-		dispatch(showAlert({open: true, severity: 'success', message}))
-
-		// send data to backend, via axios
-		console.log({updateFields})
+		await dispatch(updatePassword(updateFields)) 	// await to finish it's job next move to next line
 
 		// redirect to
 		history.push('/user/profile')
-
-		}, 2000)
 	}
 
 

@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { showAlert } from '../store/dialogReducer'
-import { loginMe } from '../store/userReducer'
+import { loginMe, signUpMe } from '../store/userReducer'
 import { formValidator } from '../util'
 import MetaData from '../components/metaData'
 
@@ -46,9 +46,16 @@ const Login = () => {
 	const [signupFields, setSignupFields] = useState({username: '', email: '', password: '', confirmPassword: '', avatar: ''})
 	const [signupFieldErrors, setSignupFieldErrors] = useState({})
 
-	const { loading, authenticated } = useSelector(state => state.user )
+	// const [ loginShowError, setLoginShowError ] = useState('')
+	const { error, loading, authenticated } = useSelector(state => state.user )
 
 
+	useEffect(() => {
+		/* To show error on first time only, + on every form submit,
+				- Ue reset error='' before every form submit, which makes error 1st time for every form submit
+					for more details see the [ React.txt => [ form Error handling ] section ] */
+		if(error) dispatch(showAlert({ open: true, severity: 'error', message: error }))
+	}, [dispatch, error, authenticated])
 
 	const tabHandler = (evt, newValue) => setValue(newValue)
 
@@ -59,48 +66,38 @@ const Login = () => {
 		const isValidated = formValidator(loginFields, setLoginFieldErrors)
 		if(!isValidated) return
 
-// (Remove when ready to deploy) mimic loading effect, as Real Server
-dispatch(loginMe(true)) 		// to enable loading effect
-setTimeout(() => {
-
-		// 1. add token in localStorage to vefiry login authentication
-		dispatch(loginMe())
-
-		// // 2. show success alert
-		// const message = 'Welcome to our application !!!'
-		// dispatch(showAlert({ open: true, severity: 'success', message}))
-
-		// 3. send data to backen by axios & also save in redux store.
-		console.log(loginFields)
-
-		// 4. Redirect to ...
-		push('/')
-}, 2000)
+		/* Shend Data to Backend + Set token into Store + change authenticated to true in store,
+			 so that no need page refresing to take immediately login */
+		dispatch(loginMe(loginFields))
 
 	}
 
 	// -----------[ Sign Up Form ]-----------
-	const handleSignupForm = (evt) => {
+	const handleSignupForm = async (evt) => {
 		evt.preventDefault()
 
 		const isValidated = formValidator(signupFields, setSignupFieldErrors)
 		if(!isValidated) return
 
-		// (Remove when ready to deploy) mimic loading effect, as Real Server
-		setTimeout(() => {
+		// in Client-Side: I used username every here in my form even in form validation but
+		// in Server-Side: I used name in schema + all API testing (Postman)
+		// So we have to relpace one with other, so that's the reason, here I rename username property
+		// to match with backend Schema
+		const data = { ...signupFields, name: signupFields.username }
 
-		// 1. show success alert
+		/* When we try to read from store it takes some time (event it happen very quickly)
+				So our next code execure event error exist in tore,
+					we wait this line, now our code wait until dispatch not finshed, That's what we want. */
+		await dispatch(signUpMe(data))
+
+		if(error) return 		// if error by form submit
+
+		// error alert will be handeld by hook, only success alert handle here.
 		const message = 'Congratulation To join our community !!!'
 		dispatch(showAlert({ open: true, severity: 'success', message}))
 
-		// 2. send data to backen by axios & also save in redux store.
-		console.log({signupFields})
-
-
 		// 3. Redirect to login (But we already in Login Page, We have to switch to login TAB ?)
 		tabHandler(null, 0) 		// Switch to Login Tab (Do the Redirect Effect)
-
-		}, 2000)
 	}
 
 	return (

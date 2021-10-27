@@ -1,3 +1,7 @@
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUser } from '../store/userReducer'
+
 import Snackbar from './snackbar'
 import Loader from './loader'
 
@@ -9,6 +13,12 @@ import CssBaseline from '@mui/material/CssBaseline'
 
 
 const Layout = ({ children }) => {
+	const dispatch = useDispatch()
+	const { authenticated } = useSelector( state => state.user )
+
+	/*Get use here so that every route have access user
+			authenticated = true means we have token on localStorage.getItem('token') */
+	useEffect(() => authenticated && dispatch(getUser()) , [dispatch])
 
 	return (
 		<>

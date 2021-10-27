@@ -14,6 +14,21 @@ exports.updateTour 	= factoryHandler.updateOne(Tour)
 exports.deleteTour 	= factoryHandler.deleteOne(Tour)
 
 
+// GET   /api/tours/tour/:slug
+exports.getTourBySlug = catchAsync( async (req, res, next) => {
+	// const tour = await Tour.findById(req.params.id)
+	const { slug } = req.params
+
+	const tour = await Tour.findOne({ slug }).populate('reviews')
+	if( !tour ) return next(appError(`No Tour found by tourId: ${id}`))
+
+	console.log(tour)
+
+	res.status(200).json({
+		status: 'success',
+		tour
+	})
+})
 
 
 /*

@@ -9,7 +9,7 @@ export const shorter = (content, length=250) => {
 }
 
 // to handle dispatch error for front-end side
-export const catchAsyncDispatch = (fn, showError ) => (dispatch, getStore) => fn(dispatch, getStore).catch(err => {
+export const catchAsyncDispatch = (fn, showError = f=>f ) => (dispatch, getStore) => fn(dispatch, getStore).catch(err => {
 	dispatch( showError(err.response.data.message) )
 	// console.log(err.response.data.message)
 })

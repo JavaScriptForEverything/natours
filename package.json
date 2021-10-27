@@ -9,11 +9,14 @@
     "seeder:dev": "node models/seeder.js --import",
     "seeder:prod": "NODE_ENV=production node models/seeder.js --import",
 
-    "server" : "nodemon .",
-    "server:prod" : "NODE_ENV=production nodemon .",
-    "client" : "cd client && yarn start",
+    "server": "nodemon .",
+    "server:prod": "NODE_ENV=production nodemon .",
+    "client": "cd client && yarn start",
 
-    "heroku-postbuild" : "yarn install && cd client && yarn install && yarn run build",
+    "dev" : "concurrently \"yarn server\"  \"yarn client\" ",
+    "prod" : "concurrently \"yarn server:prod\"  \"yarn client\" ",
+
+    "heroku-postbuild": "yarn install && cd client && yarn install && yarn run build",
     "start": "node ."
   },
   "dependencies": {
@@ -33,5 +36,8 @@
     "slugify": "^1.6.0",
     "validator": "^13.6.0",
     "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^6.3.0"
   }
 }
