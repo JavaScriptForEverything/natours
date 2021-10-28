@@ -7,6 +7,7 @@ const About = () => {
 		<>
 			<MetaData title='About Page' />
 			{/*-----[ start coding bellow here ]------*/}
+			<h2>Build About Page</h2>
 
 
 			<ul>

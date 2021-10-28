@@ -13,6 +13,7 @@ const Contact = () => {
 		<>
 			<MetaData title='Contact Page' />
 			{/*-----[ start coding bellow here ]------*/}
+			<h2>Build Contact Page</h2>
 
 			<Rating value={value} onChange={(evt, newValue) => setValue(newValue)} />
 

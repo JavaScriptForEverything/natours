@@ -60,7 +60,7 @@ const TourDetails = ({ match }) => {
 
 	return (
 		<>
-			<MetaData title='tour.name: Tour Details Page' />
+			<MetaData title={`Tour Page | ${tour.slug}`} />
 
 
 				<Grid container spacing={2} sx={{ display: 'flex', my: 3, p: 2 }} >

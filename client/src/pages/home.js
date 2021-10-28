@@ -35,7 +35,7 @@ const Home = () => {
 
 
 			<Grid container spacing={2} sx={{ my: 3, px: 2 }} >
-				<MetaData title='Home Page' />
+				<MetaData title='Home Page | get-all-tours' />
 
 				{/*-----[ items ]-----*/}
 				{/*{[...Array(12)].map( (item, index) => (*/}
