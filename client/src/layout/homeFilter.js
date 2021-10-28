@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { getTours } from '../store/tourReducer'
 
 import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
@@ -13,35 +15,30 @@ import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 
+import { difficulty, locations } from './data'
 
 const buttons = [
-	{
-		label: 'category',
-		items: ['laptop', 'smartphone', 'television']
-	},
-	{
-		label: 'difficulty',
-		items: ['easy', 'medium', 'hard']
-	},
-	{
-		label: 'location',
-		items: ['dhaka', 'rajshahi', 'cumilla']
-	},
+	{ label: 'difficulty', 	items: difficulty },
+	{ label: 'duration', 		items: ['', 3, 4, 5, 7, 9, 10, 14] },
+	// { label: 'location', 		items: locations },
 ]
 
 
 const HomeFilter = () => {
+	const dispatch = useDispatch()
+
 	const [ fields, setFields ] = useState({})
 	const [ anchorEl, setAnchorEl ] = useState()
 
-
 	const buttonClicked = (evt) => setFields({ value: evt.target.value, target: evt.target })
 	const buttonClosed 	= (evt) => setFields({ value: -1 })
-	const menuItemHandler = (evt, items) => {
+	const menuItemHandler = (evt, name, items) => {
 		buttonClosed() 													// close memu popup
 		const item = items[evt.target.value]
 
-		console.log( item)
+		dispatch(getTours({ [name]: item }))
+
+		console.log( {[name]: item} )
 	}
 
 
@@ -70,7 +67,7 @@ const HomeFilter = () => {
 							{items.map( (item, index) => (
 								<MenuItem key={item}
 									value={index}
-									onClick={(evt) => menuItemHandler(evt, items)}
+									onClick={(evt) => menuItemHandler(evt, label, items)}
 									sx={{ minWidth: 200, textTransform: 'capitalize' }}
 								>{item}</MenuItem>
 							))}

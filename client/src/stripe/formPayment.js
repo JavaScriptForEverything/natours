@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addPaymentInfo } from '../store/stripeReducer'
 
+import { CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js'
+import StripeInput from './stripeInput'
 import { paymentItems } from './data'
 
 import Box from '@mui/material/Box'
@@ -10,12 +12,13 @@ import Tab from '@mui/material/Tab'
 import { TabPanel } from '../util'
 
 import TextField from '@mui/material/TextField'
-// import InputAdornment from '@mui/material/InputAdornment'
-// import Button from '@mui/material/Button'
-// import IconButton from '@mui/material/IconButton'
 
-// import EmailIcon from '@mui/icons-material/Email'
 
+const cardItems = [
+	{ label: 'Card Number', component: CardNumberElement },
+	{ label: 'Expiration Date', component: CardExpiryElement },
+	{ label: 'CVC', component: CardCvcElement }
+]
 
 
 const PaymentDetails = () => {
@@ -55,7 +58,22 @@ const PaymentDetails = () => {
 							/>
 							)
 						}
-					</TabPanel>
+
+{/*						<TextField
+							label='Card Number'
+							InputLabelProps={{ shrink: true }}
+							fullWidth
+							required
+								// value={paymentObj[name]}
+								// onChange={changeHandler}
+								InputProps={{
+									inputProps: { component: CardNumberElement },
+									inputComponent: StripeInput
+								}}
+
+						/>
+*/}
+				</TabPanel>
 		</Box>
 	)
 }

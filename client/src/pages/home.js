@@ -25,7 +25,7 @@ const Home = () => {
 
 
 	useEffect(() => {
-		dispatch(getTours(page))
+		dispatch(getTours({ page }))
 	}, [dispatch, page])
 
 	return (
@@ -52,7 +52,7 @@ const Home = () => {
 	    	sx={{ display: 'flex', justifyContent: 'center', my: 3 }}
 	      variant='outlined'
 	      color='primary'
-	      count={paginationCount}
+	      count={tours.totalDocument && paginationCount}
 	      page={page}
 	      onChange={(evt, newValue) => setPage(newValue)}
 	      hidePrevButton

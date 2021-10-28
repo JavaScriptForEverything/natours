@@ -84,16 +84,40 @@ export const addRating = (rating) => (dispatch) => {
 // 	}
 // }
 
-export const getTours = (page) => catchAsyncDispatch(async (dispatch) => {
+export const getTourBySlug = (slug) => catchAsyncDispatch(async (dispatch) => {
 	dispatch(actions.requested())
 
-	const { data } = await axios.get(`/api/tours?page=${page}&limit=${3}`)
+	const { data } = await axios.get(`/api/tours/tour/${slug}`)
+	dispatch(actions.tourDetailsAdded(data.tour))
+}, actions.failed)
+
+export const getTours = (obj) => catchAsyncDispatch(async (dispatch) => {
+	const {
+		page = 1,
+		limit = 3,
+		difficulty = '',
+		// location = '',
+		duration = '',
+		price = '',
+		ratingsAverage = '',
+	} = obj
+
+	// let url = `/api/tours?page=${page}&limit=${limit}`
+
+	let url = `/api/tours?page=${page}`
+	    url += `&limit=${limit}`
+
+  if(difficulty) 			url += `&difficulty=${difficulty}`
+  // if(location) 				url += `&location=${location}`
+  if(duration) 				url += `&duration=${duration}`
+  if(price) 					url += `&price=${price}`
+  if(ratingsAverage) 	url += `&ratingsAverage=${ratingsAverage}`
+
+
+
+	dispatch(actions.requested())
+	const { data } = await axios.get(url)
 	dispatch(actions.toursAdded({ ...data }))
 }, actions.failed)
 
-export const getTourBySlug = (slug) => catchAsyncDispatch(async (dispatch) => {
-		dispatch(actions.requested())
 
-		const { data } = await axios.get(`/api/tours/tour/${slug}`)
-		dispatch(actions.tourDetailsAdded(data.tour))
-}, actions.failed)
